@@ -87,6 +87,15 @@ class Web_Migs_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
         }
 
     }
+    public function setOrderSuccessStatus($_orderId)
+    {
+        $successStatus = $this->getConfigData('order_status_success');
+        if($successStatus){
+            $order = Mage::getModel('sales/order')->loadByIncrementId($_orderId);
+            $order->setStatus($successStatus)->save();
+        }
+
+    }
     public function getOrderPlaceRedirectUrl()
     {
         return Mage::getSingleton('customer/session')->getRedirectUrl();

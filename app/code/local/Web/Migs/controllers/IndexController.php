@@ -7,10 +7,7 @@ class Web_Migs_IndexController extends Mage_Checkout_Controller_Action
         $request = $this->getRequest();
         $_data = $request->getParams();
         $session = Mage::getSingleton('checkout/session');
-        //if (!$session->getLastSuccessQuoteId()) {
-//            $this->_redirect('checkout/cart');
-//            return;
-//        }
+
         $_orderId = $request->getParam('vpc_OrderInfo');
         if(!$_orderId){
             $this->__failure();
@@ -47,10 +44,7 @@ class Web_Migs_IndexController extends Mage_Checkout_Controller_Action
         $rstatus = $request->getParam("vpc_AcqResponseCode");
         $txnResponseCode = Mage::helper('migs')->null2unknown(false,$rcode);
         $acqResponseCode = Mage::helper('migs')->null2unknown(false,$rstatus);
-        
-        //print_r($_orderId);exit();
-        //$comment = 'ReceiptNo: ' . $_GET['vpc_ReceiptNo'] . "<br>Message: " . $_GET['vpc_Message'] .
-        //    "<br>Card: " . $_GET['vpc_Card'] . $_GET['vpc_CardNum'];
+
         if ($errorExists === false && $txnResponseCode == '0' && $_orderId)
         {
             try
@@ -67,8 +61,9 @@ class Web_Migs_IndexController extends Mage_Checkout_Controller_Action
                 ->setMessage($request->getParam('vpc_Message'))
                 ->setInfo(serialize($_data))
                 ->setCcType($request->getParam('vpc_Card'))
-                ->setCcLast4(str_ireplace('x','',$request->getParam('vpc_CardNum')))        
+                ->setCcLast4(str_ireplace('x','',$request->getParam('vpc_CardNum')))
                 ->save();
+
             $this->__success();
         } else{
             
@@ -84,8 +79,7 @@ class Web_Migs_IndexController extends Mage_Checkout_Controller_Action
                 ->setCcType($request->getParam('vpc_Card'))
                 ->setCcLast4(str_ireplace('x','',$request->getParam('vpc_CardNum')))        
                 ->save();
-                
-                
+
                 $this->__failure();
             } else
             {
@@ -108,6 +102,7 @@ class Web_Migs_IndexController extends Mage_Checkout_Controller_Action
 
     private function __success()
     {
+
         $this->_redirect('checkout/onepage/success');
     }
     private function __failure()
